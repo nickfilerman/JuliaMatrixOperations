@@ -83,9 +83,9 @@ function minor(matrix, row, column)
         throw(DomainError("Cannot create a submatrix with a 1xN or Nx1 matrix"))
     end
     sub_matrix = Matrix{Float64}(undef, size(matrix)[1]-1, size(matrix)[2]-1)
-    for j in 1:size(matrix)[2]-1
+    for j in 1:size(matrix)[1]-1
         if j >= row
-            for k in 1:size(matrix)[1]-1
+            for k in 1:size(matrix)[2]-1
                 if k >= column
                     sub_matrix[j, k] = matrix[j+1, k+1]
                 else
@@ -93,7 +93,7 @@ function minor(matrix, row, column)
                 end
             end
         else
-            for k in 1:size(matrix)[1]-1
+            for k in 1:size(matrix)[2]-1
                 if k >= column
                     sub_matrix[j, k] = matrix[j, k+1]
                 else
@@ -247,9 +247,9 @@ function determinant(matrix)
 
             total = matrix[1, i] * determinant(sub_matrix)
             if i % 2
-                returnSchalar += total
+                returnScalar += total
             else
-                returnSchalar -= total
+                returnScalar -= total
             end
         end
 
