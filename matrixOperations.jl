@@ -79,26 +79,29 @@ end
 # \returns A sub matrix smaller than the given matrix
 =#
 function minor(matrix, row, column)
-    sub_matrix = Matrix{Float64}(undef, size(matrix)[1]-1, size(matrix)[1]-1)
-            for j in 1:size(matrix)[2]-1
-                if j >= row
-                    for k in 1:size(matrix)[1]-1
-                        if k >= i
-                            sub_matrix[j, k] = matrix[j+1, k+1]
-                        else
-                            sub_matrix[j, k] = matrix[j, k]
-                        end
-                    end
+    if size(matrix)[1] == 1 || size(matrix)[2] == 1
+        return undef
+    end
+    sub_matrix = Matrix{Float64}(undef, size(matrix)[1]-1, size(matrix)[2]-1)
+    for j in 1:size(matrix)[2]-1
+        if j >= row
+            for k in 1:size(matrix)[1]-1
+                if k >= column
+                    sub_matrix[j, k] = matrix[j+1, k+1]
                 else
-                    for k in 1:size(matrix)[1]-1
-                        if k >= i
-                            sub_matrix[j-1, k] = matrix[j, k+1]
-                        else
-                            sub_matrix[j-1, k] = matrix[j, k]
-                        end
-                    end
+                    sub_matrix[j, k] = matrix[j+1, k]
                 end
             end
+        else
+            for k in 1:size(matrix)[1]-1
+                if k >= column
+                    sub_matrix[j, k] = matrix[j, k+1]
+                else
+                    sub_matrix[j, k] = matrix[j, k]
+                end
+            end
+        end
+    end
     return sub_matrix
 end
 
@@ -169,8 +172,8 @@ function inverse(matrix)
     inverse = Matrix{Float64}(undef, size(matrix)[1], size(matrix)[2])
     scalar = 1.0/scalar
 
-    for i in 1:size(matrix)
-        for j in 1:size(matrix)
+    for i in 1:size(matrix)[2]
+        for j in 1:size(matrix)[1]
             inverse[i, j] = determinant(minor(matrix, i, j)) * scalar
         end
     end
