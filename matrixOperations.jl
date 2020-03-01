@@ -80,7 +80,7 @@ end
 =#
 function minor(matrix, row, column)
     if size(matrix)[1] == 1 || size(matrix)[2] == 1
-        return undef
+        throw(DomainError("Cannot create a submatrix with a 1xN or Nx1 matrix"))
     end
     sub_matrix = Matrix{Float64}(undef, size(matrix)[1]-1, size(matrix)[2]-1)
     for j in 1:size(matrix)[2]-1
